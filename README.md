@@ -9,10 +9,10 @@
 
  1. 把url中的参数提取出来，按顺序存到一个List中；
  2. 获取device_id；
- 3. 调用`UserInfo.getUserInfo(ts, (String[]) list.toArray(new String[list.size()]), null, device_id)`获取一个44位加密后的字符串， 第1个参数是时间戳，第2个参数是第1步的list转换成的数组，第4个参数是第2部获取的device_id；这个方法是在native中实现；
- 4. 把第3部计算的字符串前22位赋值给as，后22位赋值给cp;
+ 3. 调用`UserInfo.getUserInfo(ts, (String[]) list.toArray(new String[list.size()]), null, device_id)`获取一个44位加密后的字符串， 第1个参数是时间戳，第2个参数是第1步的list转换成的数组，第4个参数是第2步获取的device_id；这个方法是在native中实现；
+ 4. 把第3步计算的字符串前22位赋值给as，后22位赋值给cp;
  5. 调用`Lcom/ss/sys/ces/f/a;->a(as.getBytes())[B`获取一个27位的byte数组，最终会调到`Lcom/ss/sys/ces/a;->e([B)[B`，这个方法也是native实现；
- 6. 把第5部计算的27位byte数组传入`Lcom/ss/android/common/applog/k;->a([B)Ljava/lang/String;`，结果为54位的字符串，赋值给mas，k.a()的实现如下图，走最后一个else分支； 
+ 6. 把第5步计算的27位byte数组传入`Lcom/ss/android/common/applog/k;->a([B)Ljava/lang/String;`，结果为54位的字符串，赋值给mas，k.a()的实现如下图，走最后一个else分支； 
  ![java部分2](https://img-blog.csdnimg.cn/20181101173341958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmdteGU=,size_16,color_FFFFFF,t_70)  
    
 可以看到抖音url加密算法的核心部分采用c/c++语言来实现，对native部分的逆向分析比java部分难度更大，而且抖音增加了反调试技术并且对native函数的名字进行了混淆，对代码逻辑进行ollvm混淆，进一步增加了分析的难度；通过分析，我们发现抖音的加密算法在libcms.so中，利用IDA静态分析加上[inline hook](https://github.com/ele7enxxh/Android-Inline-Hook)技术，我们找到了getUserInfo的native实现函数sub_26750(0x26750是函数的相对so文件起始位置的偏移):
