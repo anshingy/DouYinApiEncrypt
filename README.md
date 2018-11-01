@@ -18,6 +18,7 @@ https://api.amemv.com/aweme/v1/feed/?manifest_version_code=310&_rticket=15410617
 ![native 1](https://img-blog.csdnimg.cn/20181101180639160.png)
 `Lcom/ss/sys/ces/a;->e([B)[B`的native实现函数是sub_2f1c8()
 ![native2](https://img-blog.csdnimg.cn/20181101182626410.png)
+
  native部分的具体细节这里不在列出，大家可以参考看雪论坛上的两篇文章：
  
  1. [\[原创\]抖音接口加密签名协议](https://bbs.pediy.com/thread-226931.htm)
